@@ -6,10 +6,12 @@ import AppKit
 ///   1. identity + health at a glance (wordmark + a single status pill)
 ///   2. the one action that matters when unhealthy (set-as-default CTA,
 ///      shown only when not default)
-///   3. recent links — the useful content — as tappable rows (re-route)
-///   4. app actions as plain menu items with muted shortcut hints
+///   3. a one-shot route: the next link opens in a chosen target
+///   4. recent links — the useful content — as tappable rows (re-route)
+///   5. app actions as plain menu items with muted shortcut hints
 struct MenuDropdownView: View {
     @Environment(LinkStore.self) private var store
+    @State private var catalog = TargetCatalog.shared
     @State private var isDefault = false
     @State private var working = false
 
@@ -36,7 +38,27 @@ struct MenuDropdownView: View {
 
             MenuSeparator()
 
-            // 3 — recent links: the useful, actionable content
+            // 3 — one-shot route for the next link only
+            HStack {
+                SectionLabel(text: "Next link only")
+                Spacer(minLength: 0)
+                Picker("", selection: $catalog.nextLinkTargetID) {
+                    Text("Usual routing").tag(String?.none)
+                    ForEach(catalog.visible) { target in
+                        Text(target.name).tag(Optional(target.id))
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .tint(BB.accent)
+                .fixedSize()
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 3)
+
+            MenuSeparator()
+
+            // 4 — recent links: the useful, actionable content
             SectionLabel(text: "Recent links")
                 .padding(.horizontal, 10)
                 .padding(.vertical, 3)
@@ -59,7 +81,7 @@ struct MenuDropdownView: View {
 
             MenuSeparator()
 
-            // 4 — app actions
+            // 5 — app actions
             MenuRow(title: "Settings…", shortcut: "⌘,") {
                 closeMenuWindow()
                 SettingsWindowController.shared.show()
@@ -88,7 +110,10 @@ struct MenuDropdownView: View {
         }
         .padding(4)
         .frame(width: 280)
-        .onAppear { isDefault = DefaultBrowser.isBrowBro }
+        .onAppear {
+            isDefault = DefaultBrowser.isBrowBro
+            catalog.refresh()
+        }
     }
 
     private func setDefault() async {
