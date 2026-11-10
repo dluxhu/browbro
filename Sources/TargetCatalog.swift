@@ -19,6 +19,16 @@ final class TargetCatalog {
         all.filter { !hidden.contains($0.id) }
     }
 
+    /// A one-shot route: the next link opens here, then routing returns to
+    /// normal. Set from the menu-bar dropdown. Not persisted.
+    var nextLinkTargetID: String?
+
+    /// Returns the one-shot target and clears it.
+    func takeNextLinkTarget() -> LaunchTarget? {
+        defer { nextLinkTargetID = nil }
+        return all.first { $0.id == nextLinkTargetID }
+    }
+
     /// Re-discover targets and apply the saved order + visibility.
     func refresh() {
         let discovered = TargetDiscovery.all()
