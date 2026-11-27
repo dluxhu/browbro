@@ -49,12 +49,64 @@ enum BrowserLauncher {
         if let privateFlag = target.privateFlag {
             flags.append(privateFlag)
         }
+        if Preferences.openInCurrentSpace, SpaceWindows.frontWindowIsElsewhere(bundleID: target.bundleID) {
+            if let flag = newWindowFlag(for: target) {
+                flags.append(flag)
+            } else if openSafariWindow(url, target: target) {
+                return
+            }
+        }
         if flags.isEmpty {
             open(url, withAppAt: target.appURL)
         } else {
             open(url, withBinaryOfAppAt: target.appURL, flags: flags)
         }
     }
+
+    /// The launch argument that opens a new window. Every Private-Window-capable
+    /// browser (the Chromium and Firefox families) takes `--new-window`.
+    private static func newWindowFlag(for target: LaunchTarget) -> String? {
+        guard PrivateWindow.capability(for: target.bundleID) != nil else { return nil }
+        // Firefox's --private-window takes the URL as its value and opens a window.
+        // A second flag would open the link in a normal window.
+        return target.privateFlag == "--private-window" ? nil : "--new-window"
+    }
+
+    /// Open the URL in a new Safari window through Apple Events. Returns false
+    /// when Safari is not the target or the App Store build is running: the
+    /// caller then opens the URL as usual.
+    private static func openSafariWindow(_ url: URL, target: LaunchTarget) -> Bool {
+        #if APPSTORE
+        return false
+        #else
+        guard target.bundleID == "com.apple.Safari" else { return false }
+        // The URL comes from any app: escape it for an AppleScript string literal.
+        let literal = url.absoluteString
+            .replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "\"", with: "\\\"")
+        let source = """
+            tell application id "com.apple.Safari"
+                make new document with properties {URL:"\(literal)"}
+                activate
+            end tell
+            """
+        // Off the main thread: the first run waits for the Automation consent prompt.
+        scriptQueue.async {
+            var error: NSDictionary?
+            NSAppleScript(source: source)?.executeAndReturnError(&error)
+            if let error {
+                launchLog.error("Safari new window failed: \(error, privacy: .public)")
+                open(url, withAppAt: target.appURL)
+            }
+        }
+        return true
+        #endif
+    }
+
+    #if !APPSTORE
+    /// NSAppleScript is not thread-safe: run every script on one serial queue.
+    private static let scriptQueue = DispatchQueue(label: "browbro.safari-script", qos: .userInitiated)
+    #endif
 
     #if APPSTORE
     /// Sandbox-legal launch: Launch Services delivers the flags. `arguments` is

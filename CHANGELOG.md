@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Open the link in a window in the current Space** (on by default). If the
+  browser's last-used window is on another desktop, the link opens in a new window
+  on this desktop, so macOS does not switch desktops. Chromium and Firefox browsers
+  in both builds; Safari in the direct build only (one Automation prompt).
 - **Mac App Store channel.** A second target, `BrowBroMAS`, builds the sandboxed,
   Sparkle-free binary the store requires (guideline 2.4.5). Chrome profile access
   persists via a security-scoped bookmark; profile / private-window launches go

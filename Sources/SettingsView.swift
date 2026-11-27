@@ -19,6 +19,7 @@ struct SettingsView: View {
     @AppStorage(Preferences.triggerModifierKey) private var triggerModifier: TriggerModifier = .option
     @AppStorage(Preferences.defaultTargetKey) private var defaultTargetID = ""
     @AppStorage(Preferences.privateWindowsEnabledKey) private var privateWindowsEnabled = false
+    @AppStorage(Preferences.openInCurrentSpaceKey) private var openInCurrentSpace = true
     @State private var launchAtLogin = false
 
     @State private var draggingID: String?
@@ -265,6 +266,11 @@ struct SettingsView: View {
                 label: "Skip picker for a single target",
                 description: "If only one browser is shown, just open it.",
                 trailing: { BBSwitch(isOn: $skipSingle) })
+            BBDivider().padding(.leading, 12)
+            SettingsRow(
+                label: "Open the link in a window in the current Space",
+                description: "If the browser's last window is on another desktop, open a new window here.",
+                trailing: { BBSwitch(isOn: $openInCurrentSpace) })
             BBDivider().padding(.leading, 12)
             SettingsRow(
                 label: "Launch at login",

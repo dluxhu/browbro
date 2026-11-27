@@ -56,6 +56,7 @@ enum Preferences {
     static let defaultTargetKey = "defaultTargetID"
     static let privateWindowsEnabledKey = "privateWindowsEnabled"
     static let privateEnabledTargetsKey = "privateEnabledTargets"
+    static let openInCurrentSpaceKey = "openInCurrentSpace"
 
     /// Pre-highlight whatever you picked last time.
     static var rememberLast: Bool {
@@ -111,6 +112,12 @@ enum Preferences {
     static var privateEnabledTargets: [String] {
         get { UserDefaults.standard.stringArray(forKey: privateEnabledTargetsKey) ?? [] }
         set { UserDefaults.standard.set(newValue, forKey: privateEnabledTargetsKey) }
+    }
+
+    /// Open the link in a new window in the current Space when the browser's
+    /// last-used window is in another Space. On by default.
+    static var openInCurrentSpace: Bool {
+        UserDefaults.standard.object(forKey: openInCurrentSpaceKey) as? Bool ?? true
     }
 }
 

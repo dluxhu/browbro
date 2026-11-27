@@ -3,10 +3,12 @@
 <plist version="1.0">
 <dict>
   <!--
-    Minimal hardened-runtime entitlements for notarization. BrowBro receives
-    kAEGetURL Apple Events and launches browsers via LaunchServices; neither
-    needs a special entitlement. Add keys here only if a future feature does
-    (e.g. com.apple.security.automation.apple-events to script another app).
+    Hardened-runtime entitlements for notarization. BrowBro receives kAEGetURL
+    Apple Events and launches browsers via LaunchServices; neither needs a
+    special entitlement. Sending Apple Events does: "Open the link in a window
+    in the current Space" scripts Safari to make a new window.
   -->
+  <key>com.apple.security.automation.apple-events</key>
+  <true/>
 </dict>
 </plist>

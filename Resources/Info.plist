@@ -45,6 +45,11 @@
 	<key>CFBundleIconFile</key>
 	<string>AppIcon</string>
 
+	<!-- Shown in the Automation prompt. Only the direct build scripts Safari
+	     (Open the link in a window in the current Space). -->
+	<key>NSAppleEventsUsageDescription</key>
+	<string>BrowBro opens a link in a new Safari window on your current desktop, so macOS does not switch desktops.</string>
+
 	<!-- Menu-bar-only accessory app: no Dock icon, no main window (Decision: LSUIElement). -->
 	<key>LSUIElement</key>
 	<true/>
