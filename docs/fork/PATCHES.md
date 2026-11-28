@@ -64,7 +64,8 @@ Source of truth for the fork's patches. Only the `dlux/fork-setup` branch edits 
 1. Fast-forward `develop` and `main` to upstream.
 2. Move `upstream-stable` to the newest stable tag.
    On `dlux/fork-setup`, change the `upstream-stable` version at the top of this file to that tag.
-3. Merge that tag into each patch branch, in release order. Run the check command.
+3. Merge that tag into each patch branch, in release order. Run the branch's check (in its
+   section above).
 4. Push the branches.
 
 ## Cut a release
