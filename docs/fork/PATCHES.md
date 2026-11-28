@@ -72,3 +72,5 @@ Source of truth for the fork's patches. Only the `dlux/fork-setup` branch edits 
 Only on the owner's word. Start `release/<version>-dlux.<N>` at the stable tag. Add one commit
 per branch in release order: its net change against its merge base with the tag. Build, tag
 `v<version>-dlux.<N>`, move `release/latest`. Nothing is pushed without the owner's go-ahead.
+After the first release is pushed, set `release/latest` as the repo's default branch
+(Settings › General). Later releases only move `release/latest`.
