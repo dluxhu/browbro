@@ -6,6 +6,9 @@ Source of truth for the fork's patches. Only the `dlux/fork-setup` branch edits 
 - Mirror branches: `develop` (upstream's default branch) and `main`. Fast-forward only.
 - `upstream-stable`: `v0.1.7`.
 - Branch prefix: `dlux/`.
+- Front page: `.github/README.md`. GitHub shows it on the default branch only. The default
+  branch stays `develop` until the first release; then `release/latest` becomes the default
+  branch and shows this page.
 - Release name: `v<upstream version>-dlux.<N>`, for example `v0.1.7-dlux.1`. Release branch
   `release/<upstream version>-dlux.<N>`; `release/latest` points at the newest one.
 - Check command for every patch (Xcode, no signing):
@@ -55,6 +58,7 @@ Source of truth for the fork's patches. Only the `dlux/fork-setup` branch edits 
 
 1. Fast-forward `develop` and `main` to upstream.
 2. Move `upstream-stable` to the newest stable tag.
+   On `dlux/fork-setup`, change the `upstream-stable` version at the top of this file to that tag.
 3. Merge that tag into each patch branch, in release order. Run the check command.
 4. Push the branches.
 
