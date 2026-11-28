@@ -17,6 +17,9 @@ struct SettingsView: View {
     @AppStorage(Preferences.triggerModifierKey) private var triggerModifier: TriggerModifier = .option
     @AppStorage(Preferences.defaultTargetKey) private var defaultTargetID = ""
     @AppStorage(Preferences.privateWindowsEnabledKey) private var privateWindowsEnabled = false
+    @AppStorage(Preferences.openInCurrentSpaceKey) private var openInCurrentSpace = true
+    @AppStorage(Preferences.currentDisplayOnlyKey) private var currentDisplayOnly = false
+    @State private var accessibilityHint = false
     @State private var launchAtLogin = false
 
     @State private var draggingID: String?
@@ -68,6 +71,11 @@ struct SettingsView: View {
         catalog.refresh()
         isDefault = DefaultBrowser.isBrowBro
         chromeAccess = ChromeAccess.canReadLocalState()
+        // Accessibility can be revoked in System Settings: turn the option off and say why.
+        if currentDisplayOnly && !AXWindows.isTrusted {
+            currentDisplayOnly = false
+            accessibilityHint = true
+        }
         launchAtLogin = LoginItem.isEnabled
         // Keep the "open plain clicks in" choice pointing at a real target:
         // seed it on first run, and heal it if the saved browser vanished.
@@ -261,6 +269,35 @@ struct SettingsView: View {
                 label: "Skip picker for a single target",
                 description: "If only one browser is shown, just open it.",
                 trailing: { BBSwitch(isOn: $skipSingle) })
+            BBDivider().padding(.leading, 12)
+            SettingsRow(
+                label: "Open the link on a currently visible Space",
+                description: "Use a browser window you can see, or open a new one, so macOS does not switch desktops.",
+                trailing: { BBSwitch(isOn: $openInCurrentSpace) })
+            BBDivider().padding(.leading, 12)
+            SettingsRow(
+                label: "Only on the current display",
+                description: "Use the display of the frontmost window. Needs Accessibility.",
+                trailing: {
+                    BBSwitch(isOn: Binding(
+                        get: { currentDisplayOnly },
+                        set: { newValue in
+                            // Ask for Accessibility only when the user turns this on.
+                            currentDisplayOnly = newValue && AXWindows.requestTrust()
+                            accessibilityHint = newValue && !currentDisplayOnly
+                        }))
+                    .disabled(!openInCurrentSpace)
+                })
+            .opacity(openInCurrentSpace ? 1 : 0.5)
+            if accessibilityHint {
+                SettingsRow(
+                    label: "Allow BrowBro in Accessibility",
+                    description: "Then turn \u{201C}Only on the current display\u{201D} on again.",
+                    trailing: {
+                        Button("Open System Settings") { NSWorkspace.shared.open(AXWindows.settingsURL) }
+                            .buttonStyle(BBButtonStyle(variant: .secondary, size: .sm))
+                    })
+            }
             BBDivider().padding(.leading, 12)
             SettingsRow(
                 label: "Launch at login",

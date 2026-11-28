@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Open the link on a currently visible Space** (on by default). If the browser's
+  last-used window is on a hidden desktop, BrowBro uses a browser window you can
+  see, or opens a new window (Chromium and Firefox browsers), so macOS does not
+  switch desktops. With Accessibility, BrowBro can bring a specific visible window
+  forward.
+- **Only on the current display** (off by default, needs Accessibility, asked only
+  when you turn it on). Limits the search to the display of the frontmost window and
+  moves a new window onto that display.
+
 ## [0.1.7] - 2026-08-27
 
 ### Changed
