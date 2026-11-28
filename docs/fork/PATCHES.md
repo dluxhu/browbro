@@ -17,9 +17,8 @@ Source of truth for the fork's patches. Only the `dlux/fork-setup` branch edits 
 ## Release order
 
 1. `dlux/next-link-override`
-2. `dlux/fork-setup`
-
-`dlux/current-space-window` joins the list after it moves to `upstream-stable`.
+2. `dlux/current-space-window`
+3. `dlux/fork-setup`
 
 ## dlux/next-link-override
 
@@ -36,13 +35,19 @@ Source of truth for the fork's patches. Only the `dlux/fork-setup` branch edits 
 
 ## dlux/current-space-window
 
-- Status: being redesigned; moves to v0.1.7 later. Until then it is
-  `feat/current-space-window`, based on upstream `develop`.
+- Base: `upstream-stable`
 - Kind: upstream candidate
-- What it does: opens the link in a browser window in the current Space.
-- Fork PR: [#2](https://github.com/dluxhu/browbro/pull/2)
+- What it does: keeps macOS from switching Spaces when BrowBro opens a link. Settings ›
+  Behavior: "Open the link on a currently visible Space" (on by default, no permission)
+  opens a new browser window, or raises a visible one with Accessibility. "Only on the
+  current display" (off by default, asks for Accessibility) limits the search to the
+  display of the frontmost window.
+- Fork PR: [#5](https://github.com/dluxhu/browbro/pull/5)
 - Upstream state: not offered
-- Not in the release order yet.
+- Files: `CHANGELOG.md`, `Sources/AXWindows.swift`, `Sources/BrowserLauncher.swift`,
+  `Sources/Preferences.swift`, `Sources/SettingsView.swift`, `Sources/SpaceWindows.swift`,
+  `scripts/check-space-windows.sh`, `scripts/check-space-windows/main.swift`
+- Check: `scripts/check-space-windows.sh`, then the check command above.
 
 ## dlux/fork-setup
 

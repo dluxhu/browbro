@@ -9,7 +9,7 @@ small set of patches on top of the newest upstream stable release. Upstream's ow
 | Patch | What it does | Fork PR |
 |---|---|---|
 | Next link only | A "Next link only" picker in the menu-bar dropdown. The next link opens in the chosen browser or Chrome profile; then routing returns to normal | [#3](https://github.com/dluxhu/browbro/pull/3) |
-| Current Space window | Opens the link in a browser window in the current Space. Being redesigned | [#2](https://github.com/dluxhu/browbro/pull/2) |
+| Visible Space | Keeps macOS from switching Spaces when a link opens: the link opens in a browser window on a visible Space | [#5](https://github.com/dluxhu/browbro/pull/5) |
 | Fork docs | This front page and the patch list (fork-only) | [#4](https://github.com/dluxhu/browbro/pull/4) |
 
 The patch list, with the branch and base of each patch, is in
