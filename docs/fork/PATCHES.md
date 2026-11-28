@@ -46,7 +46,7 @@ Source of truth for the fork's patches. Only the `dlux/fork-setup` branch edits 
 - Base: `upstream-stable`
 - Kind: fork-only (never offered upstream)
 - What it does: the fork's front page and this patch list.
-- Fork PR: see the README.
+- Fork PR: [#4](https://github.com/dluxhu/browbro/pull/4)
 - Upstream state: not offered (fork-only)
 - Files: `.github/README.md`, `docs/fork/PATCHES.md`
 - Check: none (docs only).
