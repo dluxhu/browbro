@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Next link only.** The menu-bar dropdown has a "Next link only" picker. Choose a
+  browser or Chrome profile and the next link opens there, whatever the mode; then
+  routing returns to normal.
+
 ## [0.1.7] - 2026-08-27
 
 ### Changed

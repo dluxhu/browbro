@@ -38,6 +38,13 @@ final class PickerController {
             return
         }
 
+        // A one-shot route from the menu-bar dropdown wins over every mode.
+        if let target = catalog.takeNextLinkTarget() {
+            pickerLog.info("next-link override; opening \(target.name, privacy: .public)")
+            launch(target, url: url)
+            return
+        }
+
         // Modifier mode: a plain click opens the chosen default directly; the
         // picker only appears while the trigger key is held (read now, moments
         // after the click). A hidden target can still be the default, so resolve
