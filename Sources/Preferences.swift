@@ -56,6 +56,8 @@ enum Preferences {
     static let defaultTargetKey = "defaultTargetID"
     static let privateWindowsEnabledKey = "privateWindowsEnabled"
     static let privateEnabledTargetsKey = "privateEnabledTargets"
+    static let openInCurrentSpaceKey = "openInCurrentSpace"
+    static let currentDisplayOnlyKey = "currentDisplayOnly"
 
     /// Pre-highlight whatever you picked last time.
     static var rememberLast: Bool {
@@ -111,6 +113,18 @@ enum Preferences {
     static var privateEnabledTargets: [String] {
         get { UserDefaults.standard.stringArray(forKey: privateEnabledTargetsKey) ?? [] }
         set { UserDefaults.standard.set(newValue, forKey: privateEnabledTargetsKey) }
+    }
+
+    /// Open the link in a window on a visible Space, so macOS does not switch
+    /// Spaces. On by default.
+    static var openInCurrentSpace: Bool {
+        UserDefaults.standard.object(forKey: openInCurrentSpaceKey) as? Bool ?? true
+    }
+
+    /// Limit `openInCurrentSpace` to the display of the frontmost window.
+    /// Needs Accessibility. Off by default.
+    static var currentDisplayOnly: Bool {
+        UserDefaults.standard.bool(forKey: currentDisplayOnlyKey)
     }
 }
 
