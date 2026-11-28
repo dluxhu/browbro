@@ -32,16 +32,17 @@ final class PickerController {
 
         let catalog = TargetCatalog.shared
         catalog.refresh()
-        let targets = catalog.visible
-        guard !targets.isEmpty else {
-            pickerLog.info("no targets; skipping picker")
-            return
-        }
-
-        // A one-shot route from the menu-bar dropdown wins over every mode.
+        // A one-shot route from the menu-bar dropdown wins over every mode,
+        // also when the chosen target is hidden.
         if let target = catalog.takeNextLinkTarget() {
             pickerLog.info("next-link override; opening \(target.name, privacy: .public)")
             launch(target, url: url)
+            return
+        }
+
+        let targets = catalog.visible
+        guard !targets.isEmpty else {
+            pickerLog.info("no targets; skipping picker")
             return
         }
 

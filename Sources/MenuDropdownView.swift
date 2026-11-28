@@ -42,7 +42,7 @@ struct MenuDropdownView: View {
             HStack {
                 SectionLabel(text: "Next link only")
                 Spacer(minLength: 0)
-                Picker("", selection: $catalog.nextLinkTargetID) {
+                Picker("Next link only", selection: $catalog.nextLinkTargetID) {
                     Text("Usual routing").tag(String?.none)
                     ForEach(catalog.visible) { target in
                         Text(target.name).tag(Optional(target.id))
