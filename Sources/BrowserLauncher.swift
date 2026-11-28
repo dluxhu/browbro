@@ -62,9 +62,11 @@ enum BrowserLauncher {
             }
             fallthrough
         case .newWindow:
-            guard let flag = newWindowFlag(for: target) else { break }
+            // Firefox's --private-window opens a window by itself.
+            let flag = newWindowFlag(for: target)
+            guard flag != nil || target.privateFlag == "--private-window" else { break }
             let known = display == nil ? [] : AXWindows.windows(ofBundleID: target.bundleID)
-            open(url, target: target, flags: flags + [flag])
+            open(url, target: target, flags: flags + [flag].compactMap { $0 })
             if let display { AXWindows.moveNewWindow(of: target.bundleID, excluding: known, to: display) }
             return
         }

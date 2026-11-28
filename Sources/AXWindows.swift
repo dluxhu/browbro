@@ -15,12 +15,15 @@ enum AXWindows {
     static let settingsURL = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!
 
     /// Raises the one window of `pids` with these bounds, makes it main, and
-    /// returns its app. Nil when no window or more than one window matches.
+    /// returns its app. Nil when no window or more than one window matches,
+    /// or when the raise fails.
     static func raise(bounds: CGRect, pids: Set<pid_t>) -> NSRunningApplication? {
         let matches = pids.flatMap { pid in windows(of: pid).filter { frame($0)?.isClose(to: bounds) ?? false }.map { (pid, $0) } }
         guard matches.count == 1, let (pid, window) = matches.first else { return nil }
-        AXUIElementPerformAction(window, kAXRaiseAction as CFString)
-        AXUIElementSetAttributeValue(window, kAXMainAttribute as CFString, kCFBooleanTrue)
+        // The window can close in the meantime: then the caller opens a new window.
+        guard AXUIElementPerformAction(window, kAXRaiseAction as CFString) == .success,
+              AXUIElementSetAttributeValue(window, kAXMainAttribute as CFString, kCFBooleanTrue) == .success
+        else { return nil }
         return NSRunningApplication(processIdentifier: pid)
     }
 
